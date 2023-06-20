@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from .manager import CustomUserManager
@@ -29,7 +29,7 @@ class Customer(AbstractUser):
 class Owner(models.Model):
 
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    houseIds = ArrayField(models.IntegerField())
+    
 
 
 
@@ -45,7 +45,7 @@ class House(models.Model):
     pricePerDay = models.IntegerField(blank=False)
     bookingStart = models.DateTimeField()
     bookingEnd = models.DateTimeField()
-    reviewId = ArrayField(models.IntegerField())
+    
 
 
 
@@ -64,6 +64,7 @@ class Booking(models.Model):
 class Review(models.Model):
 
     reviewId = models.BigAutoField(primary_key=True)
+    HouseId = models.ForeignKey('House', on_delete=models.CASCADE)
     userId = models.ForeignKey(Customer, on_delete=models.CASCADE)
     rating = models.FloatField(blank=False)
     comment = models.CharField(max_length=400)
