@@ -1,0 +1,14 @@
+{% if messages %}
+{% for message in messages %}
+{{ message }}
+{% endfor %}
+{% endif %}
+
+{% if user.is_authenticated %}
+<a href="{% url 'app-logout' %}">logout</a>
+{% else %}
+<a href="{% url 'app-login' %}">login</a>
+<a href="{% url 'app-signup' %}">signup</a>
+{% endif %}
+
+<a href="{% url 'house-register' %}">house Register</a>
