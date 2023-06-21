@@ -1,0 +1,162 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>register your home</title>
+
+    <style>
+    body {
+      font-family: Helvetica,Arial, sans-serif;
+      background-color: #f8c6ce;
+
+      /* background: url('{% static 'airbnb_app/bg.jpg' %}');
+      background-position: center;
+      background-size: cover; */
+      
+    }
+
+    form {
+      justify-self: start;
+      max-width: 500px;
+      margin: 0 ;
+      padding: 20px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: grid;
+      gap: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #444343;
+      margin-bottom: 20px;
+      max-width: 500px;
+    }
+
+    label {
+      color: #333;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="file"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    label[for="optional"] {
+      margin-top: 10px;
+    }
+
+    </style>
+</head>
+<body style="display: grid; grid-template-columns: 50% 50%">
+    <img src="{% static 'airbnb_app/bg.jpg' %}" style="max-width: 700px; max-height: 700px; border-radius: 100%; align-self: center; justify-self: center;" alt="image">
+    <div>
+        <h1>Register House</h1>
+        <form  method="POST" action="{% url 'house-register' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {% if messages %}
+          {% for message in messages %}
+          <p id="message" style="min-height: 30px; padding: 5px; color: #292828; border: 2px solid rgb(247, 84, 84); background-color: #fc8181; border-radius: 10px;">{{ message }}</p>
+          {% endfor %}
+          {% endif %}
+
+          <label for="images">Images of House:</label>
+          <input type="file" id="images" name="images" accept="image/*" multiple required><br>
+
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Choose the catchy title" required><br>
+
+          <label for="country">Country:</label>
+          <input type="text" id="country" name="country" placeholder="Your Country..." required><br>
+
+          <label for="state">State:</label>
+          <input type="text" id="state" name="state" placeholder="Your state..." required><br>
+      
+          <label for="district">District:</label>
+          <input type="text" id="district" name="district" placeholder="Your district..." required><br>
+      
+          <label for="nearest_town">Nearest Town:</label>
+          <input type="text" id="nearest_town" name="nearest_town" placeholder="nearest town to your house..." required><br>
+      
+          <label for="price_per_day">Price per Day:</label>
+          <input type="number" id="price_per_day" name="price_per_day" placeholder="price per day" required><br>
+      
+
+          <label for="">Blocking dates are optional.</label>
+          <label for="booking_start">Blocking Date Start:</label>
+          <input type="date" id="booking_start" name="booking_start" ><br>
+      
+          <label for="booking_end">Blocking Date End:</label>
+          <input type="date" id="booking_end" name="booking_end" ><br>
+
+
+      <div id="aminities" style="display: flex; flex-direction: column; row-gap: 10px;">
+        <label>Amenities:</label><br>
+        <div>
+          <input type="checkbox" id="amenity_wifi" name="amenities" value="wifi">
+          <label for="amenity_wifi">Wi-Fi</label><br>
+        </div>
+        <div>
+          <input type="checkbox" id="amenity_parking" name="amenities" value="Parking">
+          <label for="amenity_parking">Parking</label><br>
+        </div>
+        <div>
+          <input type="checkbox" id="amenity_pool" name="amenities" value="Pool">
+          <label for="amenity_pool">Pool</label><br>
+        </div>
+        <div>
+            <input type="checkbox" id="amenity_gym" name="amenities" value="Gym">
+            <label for="amenity_gym">Gym</label><br>
+        </div>
+        <div>
+          <input type="checkbox" id="amenity_kitchen" name="amenities" value="Kitchen">
+          <label for="amenity_kitchen">Kitchen</label><br>
+        </div>
+        <div>
+          <input type="checkbox" id="amenity_ac" name="amenities" value="Air Conditioning">
+          <label for="amenity_ac">Air Conditioning</label><br>
+        </div>
+        <div>
+          <label for="optional"> Please mention if you have more</label>
+          <input type="text" name="amenities" id="optional" placeholder="extra aminities that are provided by you, use ',' to seperate each amenity">
+        </div>
+      </div>
+      
+          <input type="submit" value="Register House">
+        </form>
+      </div>
+</body>
+</html>
+
+

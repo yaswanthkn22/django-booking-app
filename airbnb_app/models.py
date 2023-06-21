@@ -36,18 +36,23 @@ class Owner(models.Model):
 class House(models.Model):
     owner = models.ForeignKey(Owner, on_delete=models.CASCADE)
     houseId = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=200, blank=False,default='House')
+    country = models.CharField(max_length=200, blank=False, default='India')
     state = models.CharField(max_length=200, blank=False)
     district = models.CharField(max_length=200, blank=False)
     nearestTown = models.CharField(max_length=200, blank=False)
-    # offerings = models.Choices()
+    aminities = models.CharField(max_length=500, blank=True)
 
-    houseImgs=models.ImageField(upload_to='images/',blank=True)
     pricePerDay = models.IntegerField(blank=False)
-    bookingStart = models.DateTimeField()
-    bookingEnd = models.DateTimeField()
+    bookingStart = models.DateField(null=True,blank=True)
+    bookingEnd = models.DateField(null=True,blank=True)
     
 
-
+class HouseImg(models.Model):
+    imgId = models.BigAutoField(primary_key=True)
+    image = models.ImageField(upload_to='images/')
+    houseId = models.ForeignKey(House, on_delete=models.CASCADE)
+    
 
 
 class Booking(models.Model):
