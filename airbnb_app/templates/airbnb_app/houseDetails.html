@@ -35,7 +35,9 @@
         #content {
           display: grid;
           grid-template-columns: 60% 40%;
-          margin-top: 20px;
+          max-width: 80%;
+          margin: 20px auto;
+          row-gap: 30px;
         }
         #image-container {
           width: 100%;
@@ -200,8 +202,18 @@ input[type="submit"]:hover {
     </form>
   </section>
 
-  <section class="amenities" style="display: flex; column-gap: 20px;">
-    <h2>Amenities :</h2>
+  <section id="address" style="display: flex; flex-direction: column; row-gap: 8px;">
+    <h2> Address:</h2>
+    <p> <span style="font-weight: bolder;">Nearest Town:  </span> {{house.nearestTown}}</p>
+    <p> <span style="font-weight: bolder;">District: </span> {{house.district}}</p>
+    <p> <span style="font-weight: bolder;">State: </span> {{house.state}}</p>
+    <p> <span style="font-weight: bolder;">Country: </span>{{house.country}}</p>
+
+
+  </section>
+
+  <section class="amenities" style="display: flex; flex-wrap: wrap; column-gap: 20px;">
+    <h2>Amenities: </h2>
     {% if amenities %}
     <ul>
     {% for amenity in amenities %}
