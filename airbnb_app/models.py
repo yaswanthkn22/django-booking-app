@@ -42,7 +42,7 @@ class House(models.Model):
     district = models.CharField(max_length=200, blank=False)
     nearestTown = models.CharField(max_length=200, blank=False)
     aminities = models.CharField(max_length=500, blank=True)
-
+    houseImg = models.ImageField(upload_to='images/', blank=True)
     pricePerDay = models.IntegerField(blank=False)
     bookingStart = models.DateField(null=True,blank=True)
     bookingEnd = models.DateField(null=True,blank=True)
@@ -60,8 +60,8 @@ class Booking(models.Model):
     bookingId = models.BigAutoField(primary_key=True)
     userId = models.ForeignKey(Customer, on_delete=models.CASCADE)
     houseId = models.ForeignKey(House, on_delete=models.CASCADE)
-    bookingStart = models.DateTimeField(blank=False)
-    bookingEnd = models.DateTimeField(blank=False)
+    bookingStart = models.DateField(blank=False)
+    bookingEnd = models.DateField(blank=False)
     numberOfAdults = models.IntegerField(blank=False, default=0)
     numberOfChild = models.IntegerField(blank=False, default=0)
 

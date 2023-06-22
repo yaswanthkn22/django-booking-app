@@ -5,18 +5,32 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
 from django.core import validators
 from django.core.exceptions import ValidationError
-from .models import Customer, House, HouseImg, Owner
-import datetime
+from .models import Customer, House, HouseImg, Owner, Booking
+from datetime import datetime
 # Create your views here.
 
 
 def index(request):
-    return render(request, 'airbnb_app/index.html')
+
+    houses = House.objects.values('houseId','country','state','name','pricePerDay','houseImg')
+    bookings = Booking.objects.filter(userId=request.user.id).values('bookingId','houseId__houseId','houseId__bookingStart','houseId__bookingEnd','houseId__pricePerDay')
+    context = { "houses" : houses,
+                "bookings" : bookings }
+    print(bookings)
+    return render(request, 'airbnb_app/index.html', context)
 
 
-def houseDetails(request):
 
-    return HttpResponse("house details")
+def houseDetails(request,houseId):
+    house = House.objects.filter(houseId=houseId)[0]
+    amenities =str(house.aminities).split(',')
+    context = {
+        "house" : house,
+        "amenities" : amenities[:len(amenities)-1],
+        "images" : HouseImg.objects.filter(houseId=houseId).values('image')
+    }
+    print(context)
+    return render(request, 'airbnb_app/houseDetails.html', context)
 
 def customerLogin(request):
 
@@ -34,6 +48,8 @@ def customerLogin(request):
             if "house-register/login/" in request.path:
                
                 return redirect('house-register')
+            if '/bookings/login/' in request.path:
+                return redirect('house-booking')
             else:
                 return redirect('home')
 
@@ -149,6 +165,7 @@ def houseReg(request):
                     house.district = district
                     house.nearestTown = nearestTown
                     house.pricePerDay = pricePerDay
+                    house.houseImg = images[0]
                     house.save()
                     
                     for image in images:
@@ -164,3 +181,35 @@ def houseReg(request):
     else:
         messages.success(request, 'please sign in')
         return render(request, 'airbnb_app/login.html',{"data" : "from_regpage"})
+
+
+
+def bookings(request, houseId):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            startDate =datetime.strptime(request.POST.get('start-date'), '%Y-%m-%d').date() 
+            endDate = datetime.strptime(request.POST.get('end-date'), '%Y-%m-%d').date() 
+            numberOfAdults = request.POST.get('adults')
+            numberOfChild = request.POST.get('children')
+            user = request.user
+            house = House.objects.get(houseId=houseId)
+            if startDate >= endDate :
+                messages.success(request, "Start date can't be greater than end date!! ")
+                return redirect('/house/{}'.format(houseId))
+            if house.bookingStart and house.bookingEnd :
+                if startDate >= house.bookingStart and startDate <= house.bookingEnd:
+                    messages.success(request, 'Already Booked !!')
+                    return redirect('/house/{}/'.format(houseId))
+            print(request.POST)
+            print(houseId)
+            with transaction.atomic():
+                house.bookingStart = startDate
+                house.bookingEnd = endDate
+                house.save()
+                Booking.objects.create(userId=user,houseId=house,bookingStart=startDate,bookingEnd=endDate,numberOfAdults=numberOfAdults,numberOfChild=numberOfChild)
+            messages.success(request, 'Booked !! Please check your bookings')
+            return redirect('home')
+        else:
+            return redirect('home')
+    else:
+        return redirect('/bookings/login/')

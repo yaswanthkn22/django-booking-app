@@ -1,15 +1,13 @@
-
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Design by foolishdeveloper.com -->
     <title>log in</title>
  
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <!--Stylesheet-->
     <style media="screen">
     
 html,body{
@@ -17,7 +15,7 @@ html,body{
     height: 100%;
 }
 body{
-    background-color: #fda6b4;
+    background-color: #f7f1f2;
 }
 
 #container {
@@ -31,8 +29,7 @@ body{
 form{
     height: 520px;
     width: 400px;
-    background-color: rgba(255,255,255,0.13);
-    background-color: #fab7c2;
+    background-color: rgba(255, 172, 105, 0.7);
     border-radius: 10px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255,255,255,0.1);
@@ -51,6 +48,7 @@ form h3{
     font-weight: 500;
     line-height: 42px;
     text-align: center;
+    color: rgb(71, 68, 68);
 }
 
 label{
@@ -63,12 +61,15 @@ input{
     display: block;
     height: 50px;
     width: 100%;
-    background-color: rgba(255,255,255,0.07);
+    background-color: rgba(182, 176, 176, 0.07);
     border-radius: 3px;
     padding: 0 10px;
     margin-top: 8px;
     font-size: 14px;
     font-weight: 300;
+}
+form input[type="email"],input[type="password"]{
+    color: #4b4b4d;
 }
 ::placeholder{
     color: #e5e5e5;
@@ -90,6 +91,8 @@ button{
 </head>
 <body>
 
+    <img src="{% static 'airbnb_app/loginbg.jpg' %}" style="position: absolute; width: 100%; height: 100%;" alt="image">
+
     <div id="container">
 
         {% if data == 'from_regpage' %}
@@ -100,7 +103,7 @@ button{
 
             {% if messages %}
             {% for message in messages %}
-            <div class="shape">{{message}}</div>
+            <div class="shape" style="color: rgb(224, 9, 9); min-height: 30px; border: 2px solid rgb(243, 63, 63);border-radius: 10px;  background-color: #f5a2a2; padding: 10px;">{{message}}</div>
             {% endfor %}
             {% endif %}
             {% csrf_token %}
@@ -108,12 +111,14 @@ button{
             <h3>Login Here</h3>
 
             <label for="username">Email</label>
-            <input type="email" name=email placeholder="Email " id="username">
+            <input type="email" name=email placeholder="Email " id="username" style="color: rgb(90, 88, 88); background-color: rgba(224, 224, 224, 0.7)">
 
             <label for="password">Password</label>
-            <input type="password" name="password" placeholder="Password" id="password">
+            <input type="password" name="password" placeholder="Password" id="password" style="color: rgb(90, 88, 88); background-color: rgba(224, 224, 224, 0.7)">
 
             <button type="submit" class="btn btn-primary">login</button>
+
+            <label for="#">New User ??? <a href="{% url 'app-signup' %}" style="color: whitesmoke;"> please signup here</a></label> 
 
         </form>
     </div>

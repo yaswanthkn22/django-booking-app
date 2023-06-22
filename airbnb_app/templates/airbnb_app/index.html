@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,12 +15,14 @@
         *{
             font-family: Helvetica, sans-serif;
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         header{
             border: none;
             border-bottom: 1px solid rgb(172, 172, 172);
         }
-       .container div a {
+       .container div a ,button{
             text-decoration: none;
             border: 2px solid rgb(104, 103, 103);
             color: black;
@@ -27,6 +30,44 @@
             margin: 10px;
             border-radius: 10px;
         }
+
+        .container{
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 30px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            row-gap: 30px;
+        }
+        .container .card {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .inner-container{
+            max-width: 200px;
+            max-height: 250px;
+        }
+        .inner-container .card p {
+            padding: 2px 0;
+            font-size: 15px;
+            color: black;
+            font-weight: bolder;
+        }
+        #order-container {
+            display: none;
+        }
+        .orders {
+            margin: 6px;
+            min-height: 35px;
+            max-width: 800px;
+           
+            padding: 10px;
+            background-color: rgb(241, 238, 238);
+            border: 2px solid rgb(146, 142, 142);
+            border-radius: 20px;
+        }
+
+
        
     </style>
 </head>
@@ -35,15 +76,18 @@
     <header>
         <div class="container" style="max-width: 80%; padding: 20px; margin: 0 auto; display: grid; grid-template-columns: 50% 50%;">
             <img src="{% static 'airbnb_app/airbnb-logo.png' %}" style="max-height: 200px; max-width: 180px;" alt="logo">
-            <div style="display: flex; align-items: center; justify-self: end; align-self: center;">
-                <a href="{% url 'house-register' %}" style="margin: 0 100px 0 0;">Switch to hosting</a>
+            <div style=" width: 100%; display: flex; justify-content: end; align-items: center; justify-self: end; align-self: center;">
+                <a href="{% url 'house-register' %}" style="margin-right: 20%;">Switch to hosting</a>
                 {% if user.is_authenticated %}
                 {% if user.profileImg %}
                     <img src="{{ user.profileImg.url }}" alt="profile-picture" style="max-height: 40px; border-radius: 20px;">
                 {% else %}
                 <img src="{% static 'airbnb_app/empty-pic.png' %}" alt="profile-picture" style="max-height: 40px; border-radius: 20px;">
                 {% endif %}
+                   
                     <a href="{% url 'app-logout' %}">logout</a>
+
+                    <button id="orders-btn" >Bookings</button>
                 {% else %}
                     <a href="{% url 'app-login' %}">login</a>
                     <a href="{% url 'app-signup' %}">signup</a>
@@ -52,12 +96,80 @@
         </div>
     </header>
 
+
+    {% if bookings %}
+    <div id="order-container">
+        {% for booking in bookings %}
+       
+        <p class="orders"> Booking Number: {{ booking.bookingId}} <br>
+                        house : <a href="/house/{{booking.houseId__houseId}}">house id</a><br>
+                        from : {{booking.houseId__bookingStart}} <br>
+                        to : {{booking.houseId__bookingEnd}} </p>
+        
+        {% endfor %}
+    </div>
+    {% else %}
+    <div id="order-container"> 
+        <p class="orders" >Empty orders!!!</p>
+    </div>
+       
+    {% endif %}
+
+
 {% if messages %}
 {% for message in messages %}
-{{ message }}
+<p>{{ message }}</p> 
 {% endfor %}
 {% endif %}
+
+
+    {% if houses %}
+    <section>
+        <div class="container">
+        {% for house in houses %}
+        <div class="inner-container">
+            <a href="{% url 'house-details'  house.houseId  %}" style="margin: 0; border: none; width: 100%; height: 100%;">
+                <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 100%;">
+                        {% if house.houseImg %}
+                        <img src="/media/{{house.houseImg}}" alt="house" style="width: 100%; height: 100%;" >
+                        {% else %}
+                        <img src="{% static 'airbnb_app/default-house.png' %}" alt="house" style="width: 100%; height: 100%;">
+                        {% endif %}
+                        <div>
+                            <p>{{house.state}},{{house.country}}</p>
+                            <p style="font-weight: lighter; color: rgb(109, 106, 106);">{{house.name}}</p>
+                            <p>${{house.pricePerDay}} <span style="font-weight: lighter; color: rgb(105, 105, 105);">night</span></p>
+                        </div>
+                </div>
+            </a>
+        </div>
+       
+        
+        {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+
+<script>
+    let opened = false
+    const p = document.getElementById('order-container')
+    const btn = document.getElementById('orders-btn')
+    console.log(p,btn)
     
+    btn.addEventListener('click',function(){
+        if (opened == false){
+            p.style.display="block"
+            opened = true
+        }else{
+            p.style.display = "none"
+            opened = false
+        }
+        
+    })
+    
+</script>
+
 </body>
 </html>
 
