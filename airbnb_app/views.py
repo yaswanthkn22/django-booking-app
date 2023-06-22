@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout,decorators
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
 from django.core import validators
@@ -104,7 +104,11 @@ def signup(request):
         user.dateOfBirth = dateOfBirth
         if image:
             user.profileImg = image
-        user.save()
+        try:
+            user.save()
+        except IntegrityError:
+            messages.success(request, 'Already a user !!')
+            return redirect('app-signup')
         login(request,user)
         messages.success(request, 'Saved!!!')
         return redirect('home')
