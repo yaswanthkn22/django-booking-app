@@ -53,10 +53,10 @@
             color: black;
             font-weight: bolder;
         }
-        #order-container {
+        #order-container, #listing-container {
             display: none;
         }
-        .orders {
+        .orders, .listing {
             margin: 6px;
             min-height: 35px;
             max-width: 800px;
@@ -84,8 +84,8 @@
                 {% else %}
                 <img src="{% static 'airbnb_app/empty-pic.png' %}" alt="profile-picture" style="max-height: 40px; border-radius: 20px;">
                 {% endif %}
-                   
-                    <a href="{% url 'app-logout' %}">logout</a>
+                <button id="listing-btn" >listings</button>
+                <a href="{% url 'app-logout' %}">logout</a>
 
                     <button id="orders-btn" >Bookings</button>
                 {% else %}
@@ -95,6 +95,24 @@
             </div>
         </div>
     </header>
+
+    {% if listings %}
+    <div id="listing-container">
+        {% for listing in listings %}
+       
+        <p class="listing"> House ID:  <a href="/house/{{listing.houseId}}">{{listing.houseId}}</a><br>
+                        Booking Start Date : {{listing.bookingStart}}<br>
+                        Booking End Date : {{listing.bookingEnd}}<br>
+                       </p>
+        
+        {% endfor %}
+    </div>
+    {% else %}
+    <div id="listing-container"> 
+        <p class="listing" >Empty Listings!!!</p>
+    </div>
+       
+    {% endif %}
 
 
     {% if bookings %}
@@ -164,6 +182,22 @@
         }else{
             p.style.display = "none"
             opened = false
+        }
+        
+    })
+
+    let list_opened = false;
+    const list = document.getElementById('listing-container')
+    const listing_btn = document.getElementById('listing-btn')
+    console.log(list,listing_btn)
+    
+    listing_btn.addEventListener('click',function(){
+        if (list_opened == false){
+            list.style.display="block"
+            list_opened = true
+        }else{
+            list.style.display = "none"
+            list_opened = false
         }
         
     })

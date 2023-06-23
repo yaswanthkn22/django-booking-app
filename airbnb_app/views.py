@@ -14,9 +14,10 @@ def index(request):
 
     houses = House.objects.values('houseId','country','state','name','pricePerDay','houseImg')
     bookings = Booking.objects.filter(userId=request.user.id).values('bookingId','houseId__houseId','houseId__bookingStart','houseId__bookingEnd','houseId__pricePerDay')
+    listings = House.objects.filter(owner__user=request.user.id).values('houseId','bookingStart','bookingEnd')
     context = { "houses" : houses,
-                "bookings" : bookings }
-    print(bookings)
+                "bookings" : bookings,
+                "listings" : listings }
     return render(request, 'airbnb_app/index.html', context)
 
 
