@@ -53,19 +53,46 @@
             color: black;
             font-weight: bolder;
         }
+        #bookings, #listings{
+            position: relative;
+        }
         #order-container, #listing-container {
             display: none;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+        .orders-holder{
+
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border: 2px solid rgb(143, 141, 141) ;
+            background-color: aliceblue;
+            column-gap: 30px;
+            padding: 20px;
+            margin: 5px;
+        }
+        .orders-holder p #review{
+            color: rgb(62, 62, 63);
+            min-width: 100px;
+            padding: 10px;
+            background-color: pink;
+            border: 2px solid rgb(247, 131, 146);
+            border-radius: 10px;
         }
         .orders, .listing {
             margin: 6px;
-            min-height: 35px;
-            max-width: 800px;
-           
+            font-size: 1rem;
             padding: 10px;
-            background-color: rgb(241, 238, 238);
-            border: 2px solid rgb(146, 142, 142);
-            border-radius: 20px;
+            line-height: 30px;
         }
+        .listing{
+            background-color: rgb(247, 192, 192);
+            border-radius: 30px;
+            border: 2px solid rgb(247, 64, 95);
+        }
+
 
 
        
@@ -96,6 +123,7 @@
         </div>
     </header>
 
+<section id="listings">
     {% if listings %}
     <div id="listing-container">
         {% for listing in listings %}
@@ -113,17 +141,19 @@
     </div>
        
     {% endif %}
+</section>
 
-
+<section id="bookings">
     {% if bookings %}
-    <div id="order-container">
+    <div id="order-container" >
         {% for booking in bookings %}
-       
-        <p class="orders"> Booking Number: {{ booking.bookingId}} <br>
-                        house : <a href="/house/{{booking.houseId__houseId}}">house id</a><br>
-                        from : {{booking.houseId__bookingStart}} <br>
-                        to : {{booking.houseId__bookingEnd}} </p>
-        
+        <div class="orders-holder">
+            <p class="orders"> <span style="font-weight: bolder; color: rgb(63, 62, 62);"> Booking Number: </span>{{ booking.bookingId}} <br>
+                          <span style="font-weight: bolder; color: rgb(63, 62, 62);"> house : </span><a href="/house/{{booking.houseId__houseId}}">house id</a><br>
+                           <span style="font-weight: bolder; color: rgb(63, 62, 62);"> from : </span>{{booking.bookingStart}} <br>
+                           <span style="font-weight: bolder; color: rgb(63, 62, 62);"> to : </span>{{booking.bookingEnd}} </p>
+            <p><a id="review" href="{% url 'review' booking.houseId__houseId %}" style="text-decoration: none;">review</a></p>
+        </div>
         {% endfor %}
     </div>
     {% else %}
@@ -132,7 +162,7 @@
     </div>
        
     {% endif %}
-
+</section>
 
 {% if messages %}
 {% for message in messages %}
@@ -200,6 +230,13 @@
             list_opened = false
         }
         
+    })
+
+    let review = document.getElementById('review')
+    console.log(review)
+
+    review.addEventListener('click',function(){
+        console.log("Clickedd")
     })
     
 </script>

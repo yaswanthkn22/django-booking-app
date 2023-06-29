@@ -17,6 +17,7 @@ urlpatterns = [
     path('house/<int:houseId>/', views.houseDetails, name='house-details'),
     path('house/booking/<int:houseId>/', views.bookings, name='house-booking'),
     path('bookings/login/', views.customerLogin, name='booking-login'),
+    path('review/<int:houseId>/', views.review, name='review'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

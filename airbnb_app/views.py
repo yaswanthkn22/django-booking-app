@@ -13,7 +13,7 @@ from datetime import datetime
 def index(request):
 
     houses = House.objects.values('houseId','country','state','name','pricePerDay','houseImg')
-    bookings = Booking.objects.filter(userId=request.user.id).values('bookingId','houseId__houseId','houseId__bookingStart','houseId__bookingEnd','houseId__pricePerDay')
+    bookings = Booking.objects.filter(userId__id=request.user.id).values('bookingId','houseId__houseId','bookingStart','bookingEnd','houseId__pricePerDay')
     listings = House.objects.filter(owner__user=request.user.id).values('houseId','bookingStart','bookingEnd')
     context = { "houses" : houses,
                 "bookings" : bookings,
@@ -218,3 +218,8 @@ def bookings(request, houseId):
             return redirect('home')
     else:
         return redirect('/bookings/login/')
+
+
+
+def review(request,houseId):
+    return HttpResponse(houseId)
